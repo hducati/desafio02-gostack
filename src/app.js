@@ -15,15 +15,48 @@ app.get("/repositories", (request, response) => {
 });
 
 app.post("/repositories", (request, response) => {
-  // TODO
+  const {title, url, techs} = request.body
+
+  const repositorie = {id: uuid(), title, url, techs}
+  repositories.push(repositorie)
+
+  return response.json(repositorie)
 });
 
 app.put("/repositories/:id", (request, response) => {
-  // TODO
+  const id = request.params
+  const {title, url, techs} = request.body
+
+  const repositorieIndex = repositories.findIndex(repositorie => repositorie.id === id);
+
+  if (repositorieIndex < 0) {
+    return response.status(400).json({error: 'Project not found'})
+  }
+
+  const repositorie = {
+    id,
+    title,
+    url,
+    techs
+  }
+
+  repositories[repositorieIndex] = repositorie
+
+  return response.json(repositorie)
 });
 
 app.delete("/repositories/:id", (request, response) => {
-  // TODO
+    const { id } = request.params;
+
+    const repositorieIndex = repositories.findIndex(repositorie => repositorie.id === id);
+
+    if (repositorieIndex < 0) {
+      return response.status(400).json({error: 'Repositorie not found'})
+    }
+
+    repositories.splice(repositorieIndex, 1);
+
+    return response.status(204).send();
 });
 
 app.post("/repositories/:id/like", (request, response) => {
